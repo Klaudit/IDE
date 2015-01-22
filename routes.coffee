@@ -75,11 +75,16 @@ do ->
 
     for m in KD.userMachines
 
+      if label is m.uid
+        machine = m
+        break
+
       hasSameLabel = (m.label is label) or (m.slug is label)
       hasSameUser  = m.getOwner() is username
 
       if hasSameLabel and hasSameUser
         machine = m
+        break
 
     return machine
 
@@ -235,7 +240,7 @@ do ->
           if workspace
           then loadWorkspace params, workspace
           else
-            for machine in KD.userMachines when machine.label is machineLabel
+            for machine in KD.userMachines when machineLabel in [machine.label, machine.uid]
               return loadWorkspace params
 
             routeToLatestWorkspace {params}
